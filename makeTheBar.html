@@ -21,7 +21,7 @@
         fill: #b23b3b;
     }
 </style>
-<script src="https://d3js.org/d3.v3.js"></script>
+<script src="https://d3js.org/d3.v6.js"></script>
 <svg>
 
 </svg>
@@ -30,12 +30,12 @@
     var svg = d3.select('svg');
 
     var rect3d = svg.append('g')
-        .attr('height', 50)
-        .attr('width', 20)
-        .attr("transform", "translate (15,15)")
+        // .attr('height', 50)
+        // .attr('width', 20)
+        .attr("transform", "translate (10,15)")
         ;
 
-    var rh = 130, rw = 50, ang = 45;
+    var rh = 120, rw = 30, ang = 45;
 
     rect3d.append("rect")
         .attr("class", "forward")
@@ -43,24 +43,29 @@
         .attr("y", 0)
         .attr("width", rw)
         .attr("height", rh)
+        // .attr("transform", "translate (0,0)")
         ;
 
     rect3d.append("rect")
         .attr("class", "top")
         .attr("x", 0)
-        .attr("y", 0)
+        .attr("y", -rh / 2)
         .attr("width", rw)
         .attr("height", rh / 2)
-        .attr("transform", "translate (" + (rh / 2) + "," + (-rh / 2) + ") skewX(" + -ang + ")")
+        .attr("transform", "skewX(" + -ang + ")")
+
+        // .attr("transform", "translate (" + (rh / 2) + "," + (-rh / 2) + ") skewX(" + -ang + ")")
         ;
 
     rect3d.append("rect")
         .attr("class", "side")
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("width", rh/2)
-        .attr("height", rh)
-        .attr("transform", "translate (" + (-rh / 2) + "," + (rh / 2) + ") skewY(" + -ang + ")")
+        .attr("x", rw)
+        .attr("y", rw )
+        .attr("width", rw/2)
+        .attr("height", rh )
+        .attr("transform", "skewY(" + -ang + ")")
+        
+        // .attr("transform", "translate (" + (-rh / 2) + "," + (rh / 2) + ") skewY(" + -ang + ")")
         ;
 
 </script>
