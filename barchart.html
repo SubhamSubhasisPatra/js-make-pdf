@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v6.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<!-- <div id="my_dataviz"></div> -->
+<div class="canvas"></div>
+
+<script>
+
+    const width = 1000 
+    const height = 600 
+    let margin = {"top": 20, "right": 20, "bottom": 100, "left": 100};
+    const graphWidth = width - margin.left - margin.right
+    const graphHeight = height - margin.top - margin.bottom
+    // console.log(graphWidth, graphHeight); // show the height and width 
+
+    const svg = d3.select(".canvas")
+                .append("svg")
+                .attr("width",width)
+                .attr("height",height)
+    
+    const graph = svg.append("g")
+                    .attr("width",graphWidth)
+                    .attr("height",graphHeight)
+                    .attr("transform",`translate(${margin.left},${margin.top})`)
+    
+    const gXAxis = graph.append("g")
+                    .attr("transform",`translate(0,${graphHeight})`)
+    
+    const gYAxis = graph.append("g")
+
+    // add and the X and Y bars and also the read the JSON file 
+    d3.json("./barchart_data.json").then(data => {
+        // console.log(data);
+        const y = d3.scaleLinear()
+                    .domain([0,d3.max(data , d => d.Amount)])
+                    .range([graphHeight, 0])
+        
+        const x = d3.scaleBand()
+                    .domain(data.map(item => item.Period))
+                    .range([0,500])
+                    .paddingInner(0.2)
+                    // .paddingOunter(0.2)
+        
+        const rect3d = graph.selectAll('rect').data(data)
+
+        // add the custom rect 
+
+        // rect3d.attr("width",x.bandwidth)
+        //     .attr("class",'bar-rect')
+        //     .attr("height",d => graphHeight - y(d.Amount))
+        //     .attr("x",d => x(d.Period))
+        //     .attr("y", d => y(d.Amount))
+
+        
+        rect3d.enter()
+            .append('rect')
+            .attr("class", "forward")
+            .attr("width", x.bandwidth)
+            .attr("height", d => graphHeight - y(d.Amount))
+            .attr("x", d => x(d.Period))
+            .attr("y", d => y(d.Amount))
+            
+            
+            
+        const xAxis = d3.axisBottom(x)
+        const yAxis = d3.axisLeft(y)
+                        .ticks(5)
+                        .tickFormat(d => `USD ${d/1000}K`)
+        
+        gXAxis.call(xAxis)
+        gYAxis.call(yAxis)
+
+        gXAxis.selectAll("text")
+            .style("font-size",14)
+
+        gYAxis.selectAll("text")
+            .style("font-size",14)
+
+    })
+    
+
+</script>

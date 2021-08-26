@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  width: 960px;
+  height: 500px;
+  position: relative;
+}
+path.slice{
+	stroke-width:2px;
+}
+polyline{
+	opacity: .3;
+	stroke: black;
+	stroke-width: 2px;
+	fill: none;
+} 
+svg text.percent{
+	fill:white;
+	text-anchor:middle;
+	font-size:12px;
+}
+
+</style>
+<body>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="Donut3D.js"></script>
+<script>
+
+
+var data=[
+	{label:"MacOS",value:23, color:"#3366CC"},
+	{label:"ios", value:52,color:"#DC3912"},
+	{label:"Windows", value:16,color:"#FF9900"},
+	{label:"Android",value:91, color:"#109618"},
+	{label:"Arch",value:101, color:"#990099"}
+];
+
+var svg = d3.select("body").append("svg").attr("width",700).attr("height",300);
+svg.append("g").attr("id","quotesDonut");
+Donut3D.draw("quotesDonut", data, 250, 150, 130, 90, 30, 0);
+
+
+
+</script>
+</body>

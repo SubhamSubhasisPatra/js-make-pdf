@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        
+    </style>
+    <title>D3</title>
+    <script src="https://d3js.org/d3.v6.js"></script>
+</head>
+<body>
+    
+
+<div id="chart">
+
+</div>
+
+<script>
+
+    // SET THE MARGINS
+    const MARGIN = { LEFT: 150, RIGHT: 10, TOP: 10, BOTTOM: 130}
+    const WIDTH = 960 - MARGIN.LEFT - MARGIN.RIGHT
+    const HEIGHT = 500 - MARGIN.TOP - MARGIN.BOTTOM
+
+    const g = d3.select("#chart")
+            .append ("svg")
+            .attr("width", WIDTH + MARGIN.LEFT + MARGIN. RIGHT)
+            .attr("height", HEIGHT + MARGIN.TOP + MARGIN.BOTTOM)
+            .append ("g")
+            .attr("transform",`translate(${MARGIN.LEFT}, ${MARGIN.TOP})`)
+
+    // var svg = d3.select('svg');
+    let data = [190 , 350 , 507 , 89 , 130, 450 , 123,351]
+    
+    const x = d3.scaleBand()
+        .domain(data.map((d , i)=> `${i}`)).range([0,WIDTH])
+        .paddingInner(0.1)
+        .paddingOuter(0.1)
+    
+    const y = d3.scaleLinear()
+        .domain([0, 600])
+        .range([HEIGHT,0])
+    
+    const xAxisCall = d3.axisBottom(x)
+    g.append("g")
+        .attr("class", "x axis")
+        .attr("transform", `translate(0, ${HEIGHT})`)
+        .call(xAxisCall)
+        .selectAll("text")
+            .attr("y", 10)
+            .attr("x", 10)
+            .attr("text-anchor", "end")
+            .attr("transform", "rotate(40)")
+
+    const yAxisCall = d3.axisLeft(y)
+                    .ticks(5)
+                    .tickFormat(d => d + "M")
+    g.append("g")
+        .attr("class", "y axis")
+        .call(yAxisCall)
+    
+    g.append ("text")
+    .attr("class", "x axis-label")
+    .attr("x", WIDTH / 2)
+    .attr("y", HEIGHT + 110)
+    .attr("font-size", "20px")
+    .attr("text-anchor" ,"middle")
+    .text ("The word's tallest buildings")
+
+    // Y label
+    g.append ("text")
+    .attr("class", "y axis-label")
+    .attr("x",-(HEIGHT / 2))
+    .attr("y", -60)
+    .attr("font-size", "20px")
+    .attr("text-anchor", "middle")
+    .attr("transform", "rotate(-90)")
+    .text ("Height (m)")
+
+    const rectangles = g.selectAll("rect").data(data)
+
+    rectangles.enter().append("rect")
+        .attr("class", "forward")
+        .attr("x", (d , i) => x(`${i}`))
+        .attr("y", d => y(d))
+        .attr("width", x.bandwidth)
+        .attr("height", (d , i) => HEIGHT - y(d) )
+        .attr("fill", "gray")
+    
+    
+
+
+    
+
+</script>
+</body>
+</html>

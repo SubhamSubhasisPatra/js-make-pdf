@@ -29,8 +29,8 @@ function generatePieChart() {
   // set the color scale
   var color = d3
     .scaleOrdinal()
-    // .domain(["MacOS", "ios", "Windows", "Linux", "Android","iPadOS"])
     .range(d3.schemeDark2);
+    // .domain(["MacOS", "ios", "Windows", "Linux", "Android","iPadOS"])
 
   // Compute the position of each group on the pie:
   var pie = d3

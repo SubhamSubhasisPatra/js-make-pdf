@@ -30,21 +30,46 @@
     var svg = d3.select('svg');
 
     var rect3d = svg.append('g')
-        // .attr('height', 50)
-        // .attr('width', 20)
         .attr("transform", "translate (10,15)")
-        ;
+        
 
     var rh = 120, rw = 30, ang = 45;
 
-    rect3d.append("rect")
+    // rect3d.append("rect")
+    //     .attr("class", "forward")
+    //     .attr("x", 0)
+    //     .attr("y", 0)
+    //     .attr("width", rw)
+    //     .attr("height", rh)
+       
+
+    // rect3d.append("rect")
+    //     .attr("class", "top")
+    //     .attr("x", 0)
+    //     .attr("y", -rh / 2)
+    //     .attr("width", rw)
+    //     .attr("height", rh / 2)
+    //     .attr("transform", "skewX(" + -ang + ")")
+
+       
+        
+
+    // rect3d.append("rect")
+    //     .attr("class", "side")
+    //     .attr("x", rw)
+    //     .attr("y", rw )
+    //     .attr("width", rw/2)
+    //     .attr("height", rh )
+    //     .attr("transform", "skewY(" + -ang + ")")
+    
+    function make3DRect(rh , rw , ang){
+        rect3d.append("rect")
         .attr("class", "forward")
         .attr("x", 0)
         .attr("y", 0)
         .attr("width", rw)
         .attr("height", rh)
-        // .attr("transform", "translate (0,0)")
-        ;
+       
 
     rect3d.append("rect")
         .attr("class", "top")
@@ -54,8 +79,6 @@
         .attr("height", rh / 2)
         .attr("transform", "skewX(" + -ang + ")")
 
-        // .attr("transform", "translate (" + (rh / 2) + "," + (-rh / 2) + ") skewX(" + -ang + ")")
-        ;
 
     rect3d.append("rect")
         .attr("class", "side")
@@ -64,8 +87,9 @@
         .attr("width", rw/2)
         .attr("height", rh )
         .attr("transform", "skewY(" + -ang + ")")
+    
+    }
+    make3DRect(rh , rw , ang)
         
-        // .attr("transform", "translate (" + (-rh / 2) + "," + (rh / 2) + ") skewY(" + -ang + ")")
-        ;
 
 </script>
