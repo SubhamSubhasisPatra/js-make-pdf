@@ -1,11 +1,12 @@
 // Check for the time 
 
 const start = Date.now()
-const data = require('./chart.cjs')
+const chart = require('./chart.cjs')
+// console.log(data)
 
 // SVG 
 
-const svg = `${data}`;
+const svg = `${chart.generatePieChart()}`;
 
 // END of SVG 
 
@@ -47,7 +48,7 @@ const invoice = {
       let doc = new PDFDocument({ margin: 30, size: 'A4' });
     
       generateHeader(doc);
-      // generateCustomerInformation(doc, invoice);
+      generateCustomerInformation(doc, invoice);
       generateInvoiceTable(doc, invoice);
       SVGtoPDF(doc , svg,100,300,{ width: 550, height: 550 })
       generateFooter(doc);
@@ -60,7 +61,7 @@ const invoice = {
   
     function generateHeader(doc) {
       doc
-        .image("logo.png", 50, 45, { width: 155, height: 45 })
+        .image("logo.png",380 , 45, { width: 165, height: 45 , align:"right"})
         .fillColor("#444444")
         .fontSize(20)
         .text("", 110, 57)
@@ -84,13 +85,13 @@ const invoice = {
     function generateCustomerInformation(doc, invoice) {
       const shipping = invoice.shipping;
     
-      // doc
-        // .text(`Invoice Number: ${invoice.invoice_nr}`, 50, 200)
-        // .text(`Invoice Date: ${new Date()}`, 50, 215)
+      doc
+        .text(`Invoice Number: ${invoice.invoice_nr}`, 50, 200)
+        .text(`Invoice Date: ${new Date().getDate()}`, 50, 215)
         // .text(`Balance Due: ${invoice.subtotal - invoice.paid}`, 50, 130)
     
-        // .text(shipping.name, 300, 200)
-        // .text(shipping.address, 300, 215)
+        .text(shipping.name, 300, 200)
+        .text(shipping.address, 300, 215)
         // .text(`${shipping.city}, ${shipping.state}, ${shipping.country}`, 300, 130)
         // .moveDown();
     }

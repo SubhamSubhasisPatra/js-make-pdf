@@ -24,7 +24,7 @@ function generatePieChart() {
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-  var data = { MacOS: 29, ios: 20, Windows: 30, Linux: 8, Android: 12 , iPadOS : 12, KaliLinux : 123, ArchLinux : 214};
+  var data = { MacOS: 29, ios: 20, Windows: 30, fedora : 71 ,Linux: 8, Android: 12 , iPadOS : 12, KaliLinux : 123, ArchLinux : 214};
 
   // set the color scale
   var color = d3
@@ -101,8 +101,14 @@ function generatePieChart() {
     });
 
   // console.log(body.html());
-  fs.writeFileSync("arc_final.svg", body.html());
+  // fs.writeFileSync("arc_final.svg", body.html());
   return body.html()
 }
 
-module.exports = generatePieChart();
+function test(){
+  console.log('hey')
+}
+
+
+exports.generatePieChart = generatePieChart
+exports.test = test

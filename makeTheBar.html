@@ -1,0 +1,66 @@
+<style>
+    * {
+        margin: 30;
+        padding: 30;
+        border: 0;
+    }
+
+    body {
+        background: white;
+    }
+
+    .forward {
+        fill: #ee5252;
+    }
+
+    .top {
+        fill: #b43c3c;
+    }
+
+    .side {
+        fill: #b23b3b;
+    }
+</style>
+<script src="https://d3js.org/d3.v3.js"></script>
+<svg>
+
+</svg>
+
+<script>
+    var svg = d3.select('svg');
+
+    var rect3d = svg.append('g')
+        .attr('height', 50)
+        .attr('width', 20)
+        .attr("transform", "translate (15,15)")
+        ;
+
+    var rh = 130, rw = 50, ang = 45;
+
+    rect3d.append("rect")
+        .attr("class", "forward")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", rw)
+        .attr("height", rh)
+        ;
+
+    rect3d.append("rect")
+        .attr("class", "top")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", rw)
+        .attr("height", rh / 2)
+        .attr("transform", "translate (" + (rh / 2) + "," + (-rh / 2) + ") skewX(" + -ang + ")")
+        ;
+
+    rect3d.append("rect")
+        .attr("class", "side")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", rh/2)
+        .attr("height", rh)
+        .attr("transform", "translate (" + (-rh / 2) + "," + (rh / 2) + ") skewY(" + -ang + ")")
+        ;
+
+</script>
