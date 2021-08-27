@@ -18,6 +18,8 @@ var w = 600;
 var h = 30;
 var r = h/2;
 
+console.log("3D Chart")
+
 var data=[
 	{label:"MacOS",value:230, color:"#3366CC"},
 	{label:"ios", value:52,color:"#DC3912"},
@@ -123,8 +125,6 @@ function getPercent(d){
     return (d.endAngle-d.startAngle > 0.2 ? 
             Math.round(1000*(d.endAngle-d.startAngle)/(Math.PI*2))/10+'%' : '');
 }	
-
-
 
 
 // draw("quotesDonut", data, 250, 150, 130, 90, 30, 0, svg)
