@@ -2,7 +2,7 @@
   "name": "pdfMaker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "3d/3d_pie.cjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +12,7 @@
   "dependencies": {
     "d3": "^6.5.0",
     "jsdom": "^16.4.0",
+    "nodemon": "^2.0.12",
     "svg-to-pdfkit": "^0.1.8"
   }
 }

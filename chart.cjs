@@ -10,6 +10,8 @@ function generatePieChart() {
 
   let body = d3.select(dom.window.document.querySelector("#my_dataviz"));
 
+  // console.log(body.html())
+
   let width = 450;
   let height = 450;
   let marin = 60;
@@ -105,10 +107,6 @@ function generatePieChart() {
   return body.html()
 }
 
-function test(){
-  console.log('hey')
-}
 
 
 exports.generatePieChart = generatePieChart
-exports.test = test

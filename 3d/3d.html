@@ -24,21 +24,26 @@ svg text.percent{
 
 </style>
 <body>
-<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/d3.v6.min.js"></script>
 <script src="Donut3D.js"></script>
+
+<div id="my_dataviz"></div>
 <script>
 
 
 var data=[
-	{label:"MacOS",value:23, color:"#3366CC"},
+	{label:"MacOS",value:230, color:"#3366CC"},
 	{label:"ios", value:52,color:"#DC3912"},
 	{label:"Windows", value:16,color:"#FF9900"},
 	{label:"Android",value:91, color:"#109618"},
 	{label:"Arch",value:101, color:"#990099"}
 ];
 
-var svg = d3.select("body").append("svg").attr("width",700).attr("height",300);
+
+
+var svg = d3.select("#my_dataviz").append("svg").attr("width",700).attr("height",300);
 svg.append("g").attr("id","quotesDonut");
+console.log(svg)
 Donut3D.draw("quotesDonut", data, 250, 150, 130, 90, 30, 0);
 
 

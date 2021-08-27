@@ -42,18 +42,18 @@
 			return ret.join(" ");
 	}
 
-	function getPercent(d){
-		return (d.endAngle-d.startAngle > 0.2 ? 
-				Math.round(1000*(d.endAngle-d.startAngle)/(Math.PI*2))/10+'%' : '');
-	}	
+	// function getPercent(d){
+	// 	return (d.endAngle-d.startAngle > 0.2 ? 
+	// 			Math.round(1000*(d.endAngle-d.startAngle)/(Math.PI*2))/10+'%' : '');
+	// }	
 	
 	
 	Donut3D.draw=function(id, data, x /*center x*/, y/*center y*/, 
 			rx/*radius x*/, ry/*radius y*/, h/*height*/, ir/*inner radius*/){
 	
-		var _data = d3.layout.pie().sort(null).value(function(d) {return d.value;})(data);
+		var _data = d3.pie().sort(null).value(function(d) {return d.value;})(data);
 		
-		var slices = d3.select("#"+id).append("g").attr("transform", "translate(" + x + "," + y + ")")
+		var slices = d3.selectAll("#"+id).append("g").attr("transform", "translate(" + x + "," + y + ")")
 			.attr("class", "slices");
 			
 		slices.selectAll(".innerSlice").data(_data).enter().append("path").attr("class", "innerSlice")
@@ -72,19 +72,19 @@
 			.attr("d",function(d){ return pieOuter(d, rx-.5,ry-.5, h);})
 			.each(function(d){this._current=d;});
 
-		slices.selectAll(".percent").data(_data).enter().append("text").attr("class", "percent")
-			.attr("x",function(d){ return 0.6*rx*Math.cos(0.5*(d.startAngle+d.endAngle));})
-			.attr("y",function(d){ return 0.6*ry*Math.sin(0.5*(d.startAngle+d.endAngle));})
-			.text(getPercent).each(function(d){this._current=d;});			
+		// slices.selectAll(".percent").data(_data).enter().append("text").attr("class", "percent")
+		// 	.attr("x",function(d){ return 0.6*rx*Math.cos(0.5*(d.startAngle+d.endAngle));})
+		// 	.attr("y",function(d){ return 0.6*ry*Math.sin(0.5*(d.startAngle+d.endAngle));})
+		// 	.text(getPercent).each(function(d){this._current=d;});			
             
             
-        // Dead Code for Legend
-        var colour = d3.scale.category20();
+        //  Code for Legend
+        
         var legendG = slices.selectAll(".legend")
       .data(data)
       .enter().append("g")
       .attr("transform", function(d,i){
-        return "translate(" + (450 - 200) + "," + (i * 18 + -15) + ")";
+        return "translate(" + (450 - 200) + "," + (i * 20 + -15) + ")";
       })
       .attr("class", "legend");   
     
@@ -92,13 +92,12 @@
       .attr("width", 10)
       .attr("height", 10)
       .attr("fill", function(d, i) {
-        return colour(i);
+        return d.color;
       });
     
     legendG.append("text")
       .text(function(d,i){
-          console.log(d);
-        return d.value + "  " + d.label;
+        return d.label + " : " + d.value  ;
       })
       .style("font-size", 16)
       .attr("y", 10)
