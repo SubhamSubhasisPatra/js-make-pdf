@@ -80,15 +80,28 @@
     .text ("Height (m)")
 
     const rectangles = g.selectAll("rect").data(data)
-
+    
     rectangles.enter().append("rect")
         .attr("class", "forward")
-        .attr("x", (d , i) => x(`${i}`))
+        .attr("x", (d , i) => {
+            console.log(i,x(i))
+            return x(i)
+        })
         .attr("y", d => y(d))
         .attr("width", x.bandwidth)
         .attr("height", (d , i) => HEIGHT - y(d) )
         .attr("fill", "gray")
     
+        rectangles.enter().append("rect")
+        .attr("class", "forward")
+        .attr("x", (d , i) => {
+            console.log(i,x(i))
+            return x(i)
+        })
+        .attr("y", d => y(d))
+        .attr("width", x.bandwidth)
+        .attr("height", (d , i) => HEIGHT - y(d) )
+        .attr("fill", "gray")
     
 
 
@@ -97,3 +110,4 @@
 </script>
 </body>
 </html>
+

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Legendary Key</title>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.key path {
+  display: none;
+}
+
+.key line {
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.legend-title {
+    font-weight: bold;
+}
+
+/* .legend-box {
+    fill: none;
+    stroke: #888;
+    font-size: 10px;
+} */
+
+</style>
+</head>
+<body>
+<script type="text/javascript">
+
+var width = 960,
+    height = 500,
+    boxmargin = 4,
+    lineheight = 14,
+    keyheight = 10,
+    keywidth = 40,
+    boxwidth = 2 * keywidth,
+    formatPercent = d3.format(".0%");
+    
+var margin = { "left": 160, "top": 80 };
+
+// var sevenshadesofgold = [ "#ffffb2", "#fee391", "#fec44f", "#fe9929", "#ec7014", "#cc4c02", "#8c2d04" ];
+var sevenshadesofgold = [ 1 ,2 , 4 ,5 ,6 ];
+
+var title = ['Household owner','occupancy rate'],
+    titleheight = title.length*lineheight + boxmargin;
+    
+var x = d3.scaleLinear()
+    .domain([0, 1]);
+    
+var quantize = d3.scaleQuantize()
+    .domain([0, 1])
+    .range(sevenshadesofgold);
+    
+var ranges = quantize.range().length;
+
+// return quantize thresholds for the key    
+var qrange = function(max, num) {
+    var a = [];
+    for (var i=0; i<num; i++) {
+        a.push(i*max/num);
+    }
+    return a;
+}
+   
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+    
+// make legend 
+var legend = svg.append("g")
+    .attr("transform", "translate ("+margin.left+","+margin.top+")")
+    .attr("class", "legend");
+    
+legend.selectAll("text")
+    .data(title)
+    .enter().append("text")
+    .attr("class", "legend-title")
+    .attr("y", function(d, i) { return (i+1)*lineheight-2; })
+    .text(function(d) { return d; })
+
+// make legend box 
+var lb = legend.append("rect")
+    .attr("transform", "translate (0,"+titleheight+")")
+    .attr("class", "legend-box")
+    .style("fill", "none")
+    .style("stroke", "#888")
+    .style("font-size",14)
+    .attr("width", boxwidth)
+    .attr("height", ranges*lineheight+2*boxmargin+lineheight-keyheight);
+
+// make quantized key legend items
+var li = legend.append("g")
+    .attr("transform", "translate (8,"+(titleheight+boxmargin)+")")
+    .attr("class", "legend-items");
+
+li.selectAll("rect")
+    .data(quantize.range().map(function(color) {
+      var d = quantize.invertExtent(color);
+      if (d[0] == null) d[0] = x.domain()[0];
+      if (d[1] == null) d[1] = x.domain()[1];
+      return d;
+    }))
+    .enter().append("rect")
+    .attr("y", function(d, i) { return i*lineheight+lineheight-keyheight; })
+    .attr("width", keywidth)
+    .attr("height", keyheight)
+    .style("fill", function(d) { return quantize(d[0]); });
+    
+li.selectAll("text")
+    .data(qrange(quantize.domain()[1], ranges))
+    .enter().append("text")
+    .attr("x", 48)
+    .attr("y", function(d, i) { return (i+1)*lineheight-2; })
+    .text(function(d) { return formatPercent(d); });
+   
+</script>
+</body>
+</html>

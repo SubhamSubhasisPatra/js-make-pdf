@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final 3D Bar</title>
+</head>
+
+<body>
+    <script src="https://d3js.org/d3.v6.js"></script>
+    <div id="chart">
+
+    </div>
+    <script>
+        const MARGIN = { LEFT: 150, RIGHT: 10, TOP: 10, BOTTOM: 130 }
+        const WIDTH = 760 - MARGIN.LEFT - MARGIN.RIGHT
+        const HEIGHT = 500 - MARGIN.TOP - MARGIN.BOTTOM
+
+        const g = d3.select("#chart")
+            .append("svg")
+            .attr("width", WIDTH + MARGIN.LEFT + MARGIN.RIGHT)
+            .attr("height", HEIGHT + MARGIN.TOP + MARGIN.BOTTOM)
+            .append("g")
+            .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`)
+
+        let data = [
+            { "Period": "FY17", "Amount": 23000 },
+            { "Period": "FY18", "Amount": 17500 },
+            { "Period": "FY19", "Amount": 12000 },
+            { "Period": "FY20", "Amount": 14000 }
+        ]
+
+        const x = d3.scaleBand()
+            .domain(data.map((d, i) => d.Period))
+            .range([0, WIDTH])
+            .paddingInner(0.2)
+            // .paddingOuter(0.5)
+
+
+
+        const xAxisCall = d3.axisBottom(x)
+
+        g.append("g")
+            .attr("class", "x axis")
+            .attr("transform", `translate(0, ${HEIGHT})`)
+            .call(xAxisCall)
+            .selectAll("text")
+            .attr("y", 10)
+            .attr("x", 30)
+            .attr("text-anchor", "end")
+            .attr("transform", "rotate(40)")
+
+        const y = d3.scaleLinear()
+            .domain(data.map(d => d.Amount))
+            .range([HEIGHT, 0])
+
+        const yAxisCall = d3.axisLeft(y)
+            .ticks(10)
+            // .tickFormat(d => d.Amount/100 + "M")
+        g.append("g")
+            .attr("class", "y axis")
+            .call(yAxisCall)
+        
+        // 100 , 233.333 , 366.666 , 499.999
+        
+        const add3DBar = (parent, xPos, yPos, width, height, depth, duration) => {
+            const g = parent.append('g').attr('transform', `translate(${xPos}, ${yPos})`);
+
+            g.append('path')
+                .attr('d', `M 0,0 V ${0} H ${width} V 0 H 0 Z`)
+                .style('fill', '#ee5252')
+                .transition()
+                .duration(duration)
+                .attr('d', `M 0,0 V ${-height} H ${width} V 0 H 0 Z`);
+
+            g.append('path')
+                .attr('d', `M 0,${0} L ${depth},${-depth} H ${depth + width} L ${width},0 Z`)
+                .style('fill', '#b23b3b')
+                .transition()
+                .duration(duration)
+                .attr('d', `M 0,${-height} L ${depth},${-height - depth} H ${depth + width} L ${width},${-height} Z`);
+
+            g.append('path')
+                .attr('d', `M ${width},0 L ${width + depth},${-depth}, V ${-depth} L ${width},0 Z`)
+                .style('fill', '#b23b3b')
+                .transition()
+                .duration(duration)
+                .attr('d', `M ${width},0 L ${width + depth},${-depth}, V ${-height - depth} L ${width},${-height} Z`);
+        }
+
+        add3DBar(g , 120 - 20 , HEIGHT , 50 , 12000 , 20 , 500)
+        
+    </script>
+</body>
+
+</html>

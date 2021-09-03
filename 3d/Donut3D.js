@@ -65,12 +65,15 @@
 			.style("fill", function(d) { return d.data.color; })
 			.style("stroke", function(d) { return d.data.color; })
 			.attr("d",function(d){ return pieTop(d, rx, ry, ir);})
-			.each(function(d){this._current=d;});
+			.attr("border-leg",function(d) { return d.data.label})
+			.each(function(d){this._current=d;})
 		
 		slices.selectAll(".outerSlice").data(_data).enter().append("path").attr("class", "outerSlice")
 			.style("fill", function(d) { return d3.hsl(d.data.color).darker(0.7); })
 			.attr("d",function(d){ return pieOuter(d, rx-.5,ry-.5, h);})
-			.each(function(d){this._current=d;});
+			.attr("border-leg",function(d) {return d.data.label})
+			.each(function(d){this._current=d;})
+		
 
 		// slices.selectAll(".percent").data(_data).enter().append("text").attr("class", "percent")
 		// 	.attr("x",function(d){ return 0.6*rx*Math.cos(0.5*(d.startAngle+d.endAngle));})
@@ -80,28 +83,97 @@
             
         //  Code for Legend
         
-        var legendG = slices.selectAll(".legend")
-      .data(data)
-      .enter().append("g")
-      .attr("transform", function(d,i){
-        return "translate(" + (450 - 200) + "," + (i * 20 + -15) + ")";
-      })
-      .attr("class", "legend");   
+		let legendDotRadius = 8;
+		var legendG = slices
+		  .selectAll(".legend")
+		  .data(data)
+		  .enter()
+		  .append("g")
+		  .attr("transform", function (d, i) {
+			return "translate(" + (600/2.5) + "," + (i * 30 - 40) + ")";
+		  })
+		  .attr("class", "legend");
+	
+		legendG
+		  .append("circle")
+		  .attr("r", legendDotRadius)
+		  .attr("stroke", "black")
+		  .attr("stroke-width", "1px")
+		  .style("fill", (d) => d.color)
+		
+	
+		legendG
+		  .append("text")
+		  .text(d => d.label + " : " + d.value)
+		  .style("font-size", legendDotRadius * 2.5 + "px")
+		  .attr("text-anchor", "left")
+		  .attr("alignment-baseline", "middle")
+		  .attr("y", 2)
+		  .attr("x", 13);
+		console.log(legendG);
+
+
+		legend = slices.append("g")
+    .attr("class","legend")
+    .attr("transform","translate(250,60)")
+    .style("font-size","12px")
+
+    legend.each(function() {
+        var g= d3.select(this),
+            items = {},
+            svg = d3.select(g.property("nearestViewportElement")),
+            legendPadding = g.attr("data-style-padding") || 5,
+            lb = g.selectAll(".legend-box").data([true]),
+            li = g.selectAll(".legend-items").data([true])
+		console.log(g);
+        lb.enter().append("rect").classed("legend-box",true)
+        li.enter().append("g").classed("legend-items",true)
     
-    legendG.append("rect")
-      .attr("width", 10)
-      .attr("height", 10)
-      .attr("fill", function(d, i) {
-        return d.color;
-      });
-    
-    legendG.append("text")
-      .text(function(d,i){
-        return d.label + " : " + d.value  ;
+        svg.selectAll("[border-leg]").each(function() {
+            var self = d3.select(this)
+            items[self.attr("border-leg")] = {
+              pos : self.attr("border-leg-pos") || this.getBBox().y,
+              color : self.attr("border-leg-color") != undefined ? self.attr("border-leg-color") : self.style("fill") != 'none' ? self.style("fill") : self.style("stroke") 
+            }
+          })
+   
+        let result = []
+			for (const i in items){
+				temp = {}
+				temp.key = i 
+				temp.value = items[i]
+				result.push(temp)
+				temp = {}
+			}
+        items = result
+        // console.log(items);
+        // li.selectAll("text")
+        //     .data(items,function(d) { console.log(d);return d.key})
+        //     .call(function(d) { d.enter().append("text")})
+        //     .call(function(d) { d.exit().remove()})
+        //     .attr("y",function(d,i) { return i+"em"})
+        //     .attr("x","1em")
+        //     .text(function(d) { return d.key})
+        
+        // li.selectAll("circle")
+        //     .data(items,function(d) { return d.key})
+        //     .call(function(d) { d.enter().append("circle")})
+        //     .call(function(d) { d.exit().remove()})
+        //     .attr("cy",function(d,i) { return i-0.25+"em"})
+        //     .attr("cx",0)
+        //     .attr("r","0.4em")
+        //     .style("fill",function(d) { return d.value.color})  
+        
+        // Reposition and resize the box
+		console.log(li);
+        var lbbox = li._parents[0].getBBox()  
+        console.log(lbbox);
+        lb.attr("x",(lbbox.x-legendPadding))
+            .attr("y",(lbbox.y-legendPadding))
+            .attr("height",(lbbox.height+2*legendPadding))
+            .attr("width",(lbbox.width+2*legendPadding))
       })
-      .style("font-size", 16)
-      .attr("y", 10)
-      .attr("x", 11);
+
 	}
 
     

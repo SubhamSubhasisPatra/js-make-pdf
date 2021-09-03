@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>3d Bar Chart</title>
+  <style>
+    .bar .face {
+      shape-rendering: geometricPrecision;
+      stroke: #4286b4;
+      stroke-width: .7px;
+    }
+    .bar .face.front {
+      fill: #4286b4;
+    }
+
+    .bar .face.top {
+      fill: #3b82bd;
+    }
+
+    .bar .face.left,
+    .bar .face.right {
+      fill: #3675a9;
+    }
+
+    .bar:hover .face {
+      stroke: #A52A2A;
+    }
+    .bar:hover .face.front {
+      fill: #A52A2A;
+    }
+    .bar:hover .face.top {
+      fill: #991920;
+    }
+
+    .bar:hover .face.left,
+    .bar:hover .face.right {
+      fill: #8e181e;
+    }
+
+    .axis {
+      font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+      display: none;
+    }
+
+  </style>
+</head>
+<body>
+<div id="chart"></div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
+<script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript" src="bar3d.js"></script>
+<script type="text/javascript">
+  var margin = {
+    top: 20,
+    right: 20,
+    bottom: 30,
+    left: 40,
+    front: 0,
+    back: 0
+  };
+  var width = 960 - margin.left - margin.right;
+  var height = 500 - margin.top - margin.bottom;
+  var depth = 100 - margin.front - margin.back;
+
+  var xScale = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .2);
+
+  var yScale = d3.scale.linear()
+    .range([height, 0]);
+
+  var zScale = d3.scale.ordinal()
+    .domain([0, 1, 2])
+    .rangeRoundBands([0, depth], .4);
+
+  var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient('bottom');
+
+  var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient('left')
+    .ticks(10, '%');
+
+  var chart = d3.select('#chart')
+    .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
+        .attr('transform', svgHelp.translate(margin.left, margin.right));
+
+  d3.tsv('d.tsv', type, function(err, data) {
+    if (err) return;
+
+    xScale.domain(_.sortBy(_.uniq(_.map(data, 'letter'))));
+    yScale.domain([0, _.max(data, 'frequency').frequency]);
+
+    function x(d) { return xScale(d.letter); }
+    function y(d) { return yScale(d.frequency); }
+
+    var camera = [width / 2, height / 2, -1000];
+    var barGen = bar3d()
+      .camera(camera)
+      .x(x)
+      .y(y)
+      .z(zScale(0))
+      .width(xScale.rangeBand())
+      .height(function(d) { return height - y(d); })
+      .depth(xScale.rangeBand());
+
+    chart.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', svgHelp.translate(0, height))
+      .call(xAxis);
+
+    chart.append('g')
+      .attr('class', 'y axis')
+      .call(yAxis)
+      .append('text')
+        .attr('transform', svgHelp.rotate(-90))
+        .attr('y', 6)
+        .attr('dy', '.71em')
+        .style('text-anchor', 'end')
+        .text('Frequency');
+
+    
+    var extent = xScale.rangeExtent();
+    console.log(extent);
+    var middle = (extent[1] - extent[0]) / 2;
+    chart.selectAll('g.bar').data(data)
+      .enter().append('g')
+        .attr('class', 'bar')
+        // sort based on distance from center, so we draw outermost
+        // bars first. otherwise, bars drawn later might overlap bars drawn first
+        .sort(function(a, b) {
+          return Math.abs(x(b) - middle) - Math.abs(x(a) - middle);
+        })
+        .call(barGen);
+  });
+
+  function type(d) {
+    d.frequency = +d.frequency;
+    return d;
+  }
+</script>
+</body>
+</html>

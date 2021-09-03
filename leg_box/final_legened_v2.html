@@ -1,0 +1,56 @@
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.8.0-alpha.1/d3-tip.min.js"></script>
+<link rel="stylesheet" href="https://rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
+<svg width="960" height="700"></svg>
+
+<script>
+
+var data=[
+	{label:"MacOS",value:230, color:"#3366CC"},
+	{label:"ios", value:52,color:"#DC3912"},
+	{label:"Windows", value:16,color:"#FF9900"},
+	{label:"Android",value:91, color:"#109618"},
+	{label:"Arch",value:101, color:"#990099"},
+	{label:"Fedora",value:61, color:"#3792bf"}
+];
+
+var svg = d3.select("svg"),
+    margin = {top: 70, right: 20, bottom: 170, left: 170},
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom;
+// let c = d3.scaleOrdinal(d3.schemeCategory10).domain(data.map(d => d.label));
+let c = d3.scaleOrdinal(d3.schemeCategory10).domain(data.map(d => d.label));
+
+// set up legend
+// step 1: create a group for all legend-related elements
+var legendGroup = svg.append("g")
+    .attr("class", "legendOrdinal")
+    .attr("transform", "translate(220,60)");
+// step 2: first thing (lowest in z-order) to add is a rectangle to outline the legend with
+// we will fill in its size later
+var legendBox = legendGroup.append("rect")
+    .attr("class", "legend-box")
+    .attr("fill", "white")
+    .attr("stroke", "black");
+// step 3: invoke d3-legend to create the legend
+var legendOrdinal = d3.legendColor()
+    .shape("path", d3.symbol().type(d3.symbolCircle).size(150)())
+    .shapePadding(10)
+    .scale(c);
+var legend = svg.select(".legendOrdinal")
+    .call(legendOrdinal);
+// step 4: select the legend cells - we will do something with them
+var legendCells = legendGroup.selectAll('.cell');
+// step 4b: figure out what size to make the legendBox by iterating over the legendCells
+var maxWidth = 0;
+var totalHeight = 0;
+legendCells.each(function(d) {
+    var bbox = d3.select(this).node().getBBox();
+    maxWidth = bbox.width > maxWidth ? bbox.width : maxWidth;
+    totalHeight += bbox.height + 10;
+});
+legendBox.attr("width", maxWidth + 15)
+    .attr("height", totalHeight)
+    .attr("transform", "translate(-15,-15)");
+</script>

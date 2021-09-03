@@ -22,6 +22,28 @@ svg text.percent{
 	font-size:12px;
 }
 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.legend rect {
+  fill:white;
+  stroke:black;
+  opacity:0.8;}
+
 </style>
 <body>
 <script src="https://d3js.org/d3.v6.min.js"></script>
@@ -36,14 +58,14 @@ var data=[
 	{label:"ios", value:52,color:"#DC3912"},
 	{label:"Windows", value:16,color:"#FF9900"},
 	{label:"Android",value:91, color:"#109618"},
-	{label:"Arch",value:101, color:"#990099"}
+	{label:"Arch",value:101, color:"#990099"},
+	{label:"Fedora",value:61, color:"#3792bf"}
 ];
 
 
 
 var svg = d3.select("#my_dataviz").append("svg").attr("width",700).attr("height",300);
 svg.append("g").attr("id","quotesDonut");
-console.log(svg)
 Donut3D.draw("quotesDonut", data, 250, 150, 130, 90, 30, 0);
 
 
