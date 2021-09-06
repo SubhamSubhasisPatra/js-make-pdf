@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Legendary Key</title>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<style>
+
+
+
+</style>
+</head>
+<body>
+<script type="text/javascript">
+
+var width = 960,
+    height = 500,
+    boxmargin = 4,
+    lineheight = 14,
+    keyheight = 10,
+    keywidth = 40,
+    boxwidth = 2 * keywidth,
+    formatPercent = d3.format(".0%");
+    
+var margin = { "left": 160, "top": 80 };
+
+var data = [
+    { label: "MacOS", value: 130, },
+    { label: "ios", value: 52, },
+    { label: "Windows", value: 16, },
+    { label: "Android", value: 91, },
+    { label: "Arch", value: 101, },
+    { label: "Fedora", value: 61, },
+    { label: "Ubatu", value: 96, },
+    { label: "Red hat", value: 126, },
+
+  ];
+
+  let colorScheme = d3
+				.scaleOrdinal(d3.schemeCategory10)
+				.domain(data.map((d) => d.label));
+
+  let ranges= data.length
+  var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+    
+// make legend 
+var legend = svg.append("g")
+    .attr("transform", "translate ("+margin.left+","+margin.top+")")
+    .attr("class", "legend");
+
+    var lb = legend.append("rect")
+    .attr("transform", "translate (0,"+32+")")
+    .attr("class", "legend-box")
+    .style("fill","none")
+    .style("stroke","#888")
+    .style("font-size","18px")
+    .attr("width", boxwidth)
+    .attr("height", ranges*lineheight+2*boxmargin+lineheight-keyheight);
+
+   
+    // make quantized key legend items
+var li = legend.append("g")
+    .attr("transform", "translate (8,"+(32+boxmargin)+")")
+    .attr("class", "legend-items");
+
+li.selectAll("rect")
+    .data(data)
+    .enter().append("rect")
+    .attr("width", 8)
+    .attr("height", 8)
+	.attr("stroke", "black")
+	.attr("stroke-width", "1px")
+    .attr("y", function(d, i) { return i*lineheight+lineheight-keyheight; })
+    .style("fill",d => colorScheme(d.label));
+
+li.selectAll("text")
+    .data(data)
+    .enter().append("text")
+    .attr("x", 20)
+    .attr("y", function(d, i) { return (i+1)*lineheight-2; })
+    .text(d => d.label )
+    .style("font-size","12px")
+  
+    var lbbox = li[0][0].getBBox()  
+    console.log(lbbox)
+
+</script>
+</body>
+</html>
