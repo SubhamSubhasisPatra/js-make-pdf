@@ -1,7 +1,7 @@
-<script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.8.0-alpha.1/d3-tip.min.js"></script>
-<link rel="stylesheet" href="https://rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.8.0-alpha.1/d3-tip.min.js"></script>
+<link rel="stylesheet" href="https://rawgithub.com/Caged/d3-tip/master/examples/example-styles.css"> -->
 <svg width="960" height="700"></svg>
 
 <script>
@@ -21,7 +21,6 @@ var svg = d3.select("svg"),
     height = +svg.attr("height") - margin.top - margin.bottom;
 // let c = d3.scaleOrdinal(d3.schemeCategory10).domain(data.map(d => d.label));
 let c = d3.scaleOrdinal(d3.schemeCategory10).domain(data.map(d => d.label));
-
 // set up legend
 // step 1: create a group for all legend-related elements
 var legendGroup = svg.append("g")
